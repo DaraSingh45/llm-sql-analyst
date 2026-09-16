@@ -1,0 +1,19 @@
+# Optional: use this if you'd rather not install PostgreSQL natively.
+# `docker compose up -d` gives you a lightweight Postgres instance (~50-100MB RAM).
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: llm_sql_analyst_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: llm_sql_analyst
+      POSTGRES_USER: llm_sql_user
+      POSTGRES_PASSWORD: llm_sql_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    mem_limit: 300m
+
+volumes:
+  pgdata:
