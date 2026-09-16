@@ -1,0 +1,86 @@
+[
+  {
+    "id": "q1",
+    "category": "aggregation_ranking",
+    "question": "Which department had the highest attrition in 2024?",
+    "gold_sql": "SELECT d.department_name, COUNT(*) AS attrition_count FROM employees e JOIN departments d ON e.department_id = d.department_id WHERE e.termination_date >= '2024-01-01' AND e.termination_date < '2025-01-01' GROUP BY d.department_name ORDER BY attrition_count DESC LIMIT 1;",
+    "expect_fallback": false
+  },
+  {
+    "id": "q2",
+    "category": "time_series",
+    "question": "What is the monthly attrition count for the Engineering department in 2024?",
+    "gold_sql": "SELECT DATE_TRUNC('month', e.termination_date)::date AS month, COUNT(*) AS attrition_count FROM employees e JOIN departments d ON e.department_id = d.department_id WHERE d.department_name = 'Engineering' AND e.termination_date >= '2024-01-01' AND e.termination_date < '2025-01-01' GROUP BY month ORDER BY month;",
+    "expect_fallback": false
+  },
+  {
+    "id": "q3",
+    "category": "simple_count",
+    "question": "How many employees are currently active?",
+    "gold_sql": "SELECT COUNT(*) AS active_headcount FROM employees WHERE employment_status = 'Active';",
+    "expect_fallback": false
+  },
+  {
+    "id": "q4",
+    "category": "aggregation",
+    "question": "What is the average salary by department?",
+    "gold_sql": "SELECT d.department_name, ROUND(AVG(e.salary), 2) AS avg_salary FROM employees e JOIN departments d ON e.department_id = d.department_id GROUP BY d.department_name ORDER BY avg_salary DESC;",
+    "expect_fallback": false
+  },
+  {
+    "id": "q5",
+    "category": "aggregation_ranking",
+    "question": "Which department currently has the highest headcount?",
+    "gold_sql": "SELECT d.department_name, COUNT(*) AS headcount FROM employees e JOIN departments d ON e.department_id = d.department_id WHERE e.employment_status = 'Active' GROUP BY d.department_name ORDER BY headcount DESC LIMIT 1;",
+    "expect_fallback": false
+  },
+  {
+    "id": "q6",
+    "category": "filter_sort",
+    "question": "List the top 5 highest paid active employees.",
+    "gold_sql": "SELECT first_name, last_name, salary FROM employees WHERE employment_status = 'Active' ORDER BY salary DESC LIMIT 5;",
+    "expect_fallback": false
+  },
+  {
+    "id": "q7",
+    "category": "ratio",
+    "question": "What was the attrition rate in 2023, defined as employees terminated in 2023 divided by employees active at the start of 2023?",
+    "gold_sql": "WITH terminated_2023 AS (SELECT COUNT(*) AS cnt FROM employees WHERE termination_date >= '2023-01-01' AND termination_date < '2024-01-01'), active_start_2023 AS (SELECT COUNT(*) AS cnt FROM employees WHERE hire_date < '2023-01-01' AND (termination_date IS NULL OR termination_date >= '2023-01-01')) SELECT ROUND(100.0 * t.cnt / NULLIF(a.cnt,0), 2) AS attrition_rate_pct FROM terminated_2023 t, active_start_2023 a;",
+    "expect_fallback": false
+  },
+  {
+    "id": "q8",
+    "category": "tenure",
+    "question": "What is the average tenure in years of terminated employees?",
+    "gold_sql": "SELECT ROUND(AVG(EXTRACT(EPOCH FROM (termination_date - hire_date)) / (365.25*24*3600)), 2) AS avg_tenure_years FROM employees WHERE termination_date IS NOT NULL;",
+    "expect_fallback": false
+  },
+  {
+    "id": "q9",
+    "category": "count_by_year",
+    "question": "How many employees were hired each year?",
+    "gold_sql": "SELECT EXTRACT(YEAR FROM hire_date)::int AS hire_year, COUNT(*) AS hires FROM employees GROUP BY hire_year ORDER BY hire_year;",
+    "expect_fallback": false
+  },
+  {
+    "id": "q10",
+    "category": "ambiguous",
+    "question": "How's the company doing overall?",
+    "gold_sql": null,
+    "expect_fallback": true
+  },
+  {
+    "id": "q11",
+    "category": "unsupported_operation",
+    "question": "Delete all employees who were terminated before 2022.",
+    "gold_sql": null,
+    "expect_fallback": true
+  },
+  {
+    "id": "q12",
+    "category": "out_of_scope",
+    "question": "What is the weather like in our Sales office today?",
+    "gold_sql": null,
+    "expect_fallback": true
+  }
+]
