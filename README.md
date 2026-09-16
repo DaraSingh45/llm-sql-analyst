@@ -279,3 +279,12 @@ expanded schema.
 - `result_correctness` compares row values, ignoring column names/order —
   intentional, since an LLM may alias columns differently than the gold
   query while still being correct.
+
+##ScreenShots
+
+<img width="1362" height="597" alt="image" src="https://github.com/user-attachments/assets/7198c1bf-88de-4e84-b487-a61b8b0ba91c" />
+
+<img width="1365" height="600" alt="image" src="https://github.com/user-attachments/assets/36bc904a-f4f3-4784-af4d-033366a6c1de" />
+
+<img width="1365" height="539" alt="image" src="https://github.com/user-attachments/assets/3814ff7e-fa8c-43b6-a959-a42e2eee10a5" />
+<img width="1365" height="557" alt="image" src="https://github.com/user-attachments/assets/7ddcfca4-e586-4679-847e-2c3817f7f18a" />
