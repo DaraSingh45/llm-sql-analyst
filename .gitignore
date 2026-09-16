@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+outputs/*.pkl
+evaluation/results/*.csv
+evaluation/results/*.md
+.venv/
+*.egg-info/
